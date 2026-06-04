@@ -1,0 +1,41 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// This tells Prisma what the "Role" type actually is!
+enum Role {
+  CLIENT
+  ARTIST
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  role          Role     @default(CLIENT)
+  
+  // Profile Fields
+  name          String?  
+  bio           String?
+  style         String?
+  startingPrice String?
+  portfolio     String[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Commission {
+      id          String   @id @default(uuid())
+      artistId    String   // Who is doing the work
+      clientEmail String   // Who is requesting it
+      details     String   // What they want drawn
+      budget      String   // What they are willing to pay
+      status      String   @default("PENDING") // PENDING, ACCEPTED, or DECLINED
+      createdAt   DateTime @default(now())
+    }
